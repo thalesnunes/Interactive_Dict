@@ -1,12 +1,13 @@
 from ferramentas import header
 import json
 import difflib
+from sql_connector import connect_and_fetch
 
 def load_data():
     
     return json.load(open('data.json'))
 
-def get_word(word):
+def get_word_local(word):
     
     return data[word]
 
@@ -25,8 +26,11 @@ def user_interaction():
 
 def print_defs(word):
     
-    for i, definition in enumerate(get_word(word)):
-                print(f'{i+1}. {definition}')
+    # for i, definition in enumerate(get_word_local(word)):
+    #             print(f'{i+1}. {definition}')       (Using local database)
+    results = connect_and_fetch(word)
+    for i, definition in enumerate(results):
+        print(f'{i+1}. {definition[1]}')
                 
 
 if __name__ == "__main__":
@@ -54,4 +58,4 @@ if __name__ == "__main__":
                     print_defs(guess)
                     break
                 else:
-                    continue    
+                    continue
